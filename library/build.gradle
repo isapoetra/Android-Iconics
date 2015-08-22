@@ -20,9 +20,10 @@ android {
         abortOnError false
     }
 }
-if (project.hasProperty('pushall') || project.hasProperty('libraryonly')) {
+
+/*if (project.hasProperty('pushall') || project.hasProperty('libraryonly')) {
     apply from: '../gradle-mvn-push.gradle'
-}
+}*/
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
