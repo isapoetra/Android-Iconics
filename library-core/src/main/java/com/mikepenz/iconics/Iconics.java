@@ -118,13 +118,13 @@ public final class Iconics {
 
 		//StringBuilder text = new StringBuilder(textSpanned.toString());
 		StringBuilder text = new StringBuilder(textSpanned);
-		Pattern p = Pattern.compile("\\{(.+?)[-](.+?)\\}"); //TODO find other regex
+		Pattern p = Pattern.compile("\\{(.+?)\\}"); //TODO find other regex
 		Matcher m = p.matcher(text);
 		List<String> ignored = new ArrayList<>();
 		while (m.find()) { // Find each match in turn; String can't do this.
-			Log.d("match", m.group(1));
-			String iconString = m.group(1) + '_' + m.group(2);
-			fontKey = m.group(1);
+			String iconString = m.group(1).replace("-","_");
+			Log.d("match", iconString);
+			fontKey = iconString.substring(0,iconString.indexOf("_"));
 			if (ignored.contains(fontKey)) continue; //prevent recursive
 
 			if (fonts.containsKey(fontKey)) {
@@ -141,37 +141,36 @@ public final class Iconics {
 			m = p.matcher(text);
 		}
 
-        LinkedList<StyleContainer> styleContainers = new LinkedList<StyleContainer>();
-        do {
-            //get the information from the iconString
-            int endIndex = text.substring(startIndex).indexOf("}") + startIndex + 1;
-            String iconString = text.substring(startIndex + 1, endIndex - 1);
-            iconString = iconString.replaceAll("-", "_").toLowerCase();
-            try {
-                //get the correct character for this Font and Icon
-                IIcon icon = fonts.get(fontKey).getIcon(iconString);
-                //we can only add an icon which is a font
-                if (icon != null) {
-                    char fontChar = icon.getCharacter();
-                    String iconValue = String.valueOf(fontChar);
+		SpannableString sb = new SpannableString(text);
+		//reapply all previous styles
+		for (StyleSpan span : textSpanned.getSpans(0, textSpanned.length(), StyleSpan.class)) {
+			int spanStart = newSpanPoint(textSpanned.getSpanStart(span), removed);
+			int spanEnd = newSpanPoint(textSpanned.getSpanEnd(span), removed);
+			if (spanStart >= 0 && spanEnd > 0) {
+				sb.setSpan(span, spanStart, spanEnd, textSpanned.getSpanFlags(span));
+			}
+		}
 
-                    //get just the icon identifier
-                    text = text.replace(startIndex, endIndex, iconValue);
+		for (StyleContainer styleContainer : styleContainers) {
+			sb.setSpan(new IconicsTypefaceSpan("sans-serif", styleContainer.getFont().getTypeface(ctx)), styleContainer.getStartIndex(), styleContainer.getEndIndex(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			if (iconColor != 0)
+				sb.setSpan(new ForegroundColorSpan(iconColor), styleContainer.getStartIndex(), styleContainer.getEndIndex(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                    //store some info about the removed chars
-                    removedChars = removedChars + (endIndex - startIndex);
-                    removed.add(new RemoveInfo(startIndex, (endIndex - startIndex - 1), removedChars));
+			if (stylesFor.containsKey(styleContainer.getIcon())) {
+				for (CharacterStyle style : stylesFor.get(styleContainer.getIcon())) {
+					CharacterStyle nstyle = CharacterStyle.wrap(style);
+					sb.setSpan(nstyle, styleContainer.getStartIndex(), styleContainer.getEndIndex(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
+			} else if (styles != null) {
+				for (CharacterStyle style : styles) {
+					sb.setSpan(CharacterStyle.wrap(style), styleContainer.getStartIndex(), styleContainer.getEndIndex(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                    //add the current icon to the container
-                    styleContainers.add(new StyleContainer(startIndex, startIndex + 1, iconString, fonts.get(fontKey)));
-                }
-            } catch (IllegalArgumentException e) {
-                Log.w(Iconics.TAG, "Wrong icon name: " + iconString);
-            }
+				}
+			}
+		}
 
 
 		return sb;
-
 	}
 
 	private static int newSpanPoint(int pos, ArrayList<RemoveInfo> removed) {

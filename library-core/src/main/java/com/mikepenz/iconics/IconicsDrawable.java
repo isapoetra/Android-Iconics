@@ -105,7 +105,7 @@ public class IconicsDrawable extends Drawable {
         mContext = context.getApplicationContext();
         prepare();
 
-        ITypeface font = Iconics.findFont(icon.substring(0, icon.indexOf('-')));
+        ITypeface font = Iconics.findFont(mContext ,icon.substring(0, icon.indexOf('-')));
         icon = icon.replace("-", "_");
         icon(font.getIcon(icon));
     }
