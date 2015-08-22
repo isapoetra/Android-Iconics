@@ -1,71 +1,95 @@
-#Android-Iconics  [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mikepenz/iconics/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.mikepenz/iconics) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Iconics-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1164)
+#Android-Iconics  [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mikepenz/iconics-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.mikepenz/iconics-core) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Iconics-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1164)
 
-Android-Iconics is a library to use (almost) any alternative iconfont in your projects. It allows you to add any Android-Iconics compatible typeface-library-addon to your project and you are able to start using that font.
+![Image](https://raw.githubusercontent.com/mikepenz/Android-Iconics/feature/next-generation/DEV/github/banner.png)
 
-*Fonts included by default:*
+> If you are an app developer you will know the problem. You start an app but require many different icons, in different sizes (**ldpi, mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi**), **different colors**, and **different variants**.
+If you get the icons as **vector** (.svg) or there are many changes over the time, you will always have to get the correct drawables again.
+
+> **This consumes a lot of time!**
+
+Now there's an **easy, fast, and small** solution for this! The **Android-Iconics** library.
+
+This library allows you to include vector icons everywhere in your project. No limits are given.
+**Scale with no limit**, use **any Color** at any time, provide a **contour**, and many additional customizations...
+
+Use the icons in the variation you need them.
+
+**What do you get**
+- No customization limitations (size, color, contour, background, padding, positioning, ...)
+- One icon source (no more mdpi, hdpi, ...)
+- Flexibility
+- If it takes an Drawable, it will also work with the IconicsDrawable!
+- Save in APK size
+
+**Already available fonts**
 - FontAwesome
 - Material Design Icons
-
-*Fonts available as addon:*
 - Meteocons
 - Octicons
 - Community Material Icons
 
-__ **UPGRADE FROM < 1.0.0:**
-The package of the views was changed to `com.mikepenz.iconics.view.*`.
-Changed maven group. The group was changed from `com.mikepenz.iconics` to `com.mikepenz`. You can get all updates via the new one `compile 'com.mikepenz:iconics:1.0.1@aar'` (also check to update your typeface addon dependencies)
+**Need more?**
+Provide additional fonts for you project, or even create your custom font with just the icons you need.
 
 
-__ **NOTE:** UPGRADE FROM < 0.7.5 Remove the `Google Material Design Icons` from your dependencies because it's now default and included within the main Android-Iconics package
-
-Let's start with some awesome screenshots ;)
-
-![Image](https://raw.githubusercontent.com/mikepenz/Android-Iconics/master/DEV/screenshots/screenshot_1_small.png)
-![Image](https://raw.githubusercontent.com/mikepenz/Android-Iconics/master/DEV/screenshots/screenshot_2_small.png)
+> UPGRADE < v2.0.0
+>* there is now a core package which comes without included fonts
+>* provide the fonts you need. no additional steps required
 
 
-##Include in your project
-The Android-Iconics Library is pushed to [Maven Central], so you just need to add the following dependency to your `build.gradle`.
+#Setup
 
-```javascript
+##1. Provide the gradle dependency
+```gradle
 dependencies {
-	compile 'com.mikepenz:iconics:1.3.0@aar'
+	compile 'com.mikepenz:iconics-core:1.7.3@aar'
 }
 ```
 
-##How to use
-
-Use it as Drawable anywhere. Create it like this:
-
-```java
-new IconicsDrawable(this, FontAwesome.Icon.faw_android).color(Color.RED).sizeDp(24)
+##2. Choose your desired fonts
+```gradle
+compile 'com.mikepenz:google-material-typeface:1.2.0.1@aar'
+compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
+compile 'com.mikepenz:octicons-typeface:3.0.0.1@aar'
+compile 'com.mikepenz:meteocons-typeface:1.1.0.1@aar'
+compile 'com.mikepenz:community-material-typeface:1.1.70.3@aar'
 ```
 
-You can use these icons in any IconicTextView just by defining the icon within the text. An example for FontAwesome looks like this: {faw-github}. You see pretty easy right?
+#Usage
 
-Or use it on any text by using the simple builder pattern. Here's the shortest possible sample:
+##Use as drawable
 
 ```java
-new Iconics.IconicsBuilder().ctx(this).on(YOUR_TEXT_VIEW).build();
+new IconicsDrawable(this)
+    .icon(FontAwesome.Icon.faw_android)
+    .color(Color.RED)
+    .sizeDp(24)
 ```
-Define icons in a text as following:
+
+##Use via XML
+
+If you use the Iconics library via XML provide the icon you want to use in the following syntax: `gmd-favorite` --> `fontId`-`iconName`. A list of the
+available fonts and their `fontId` can be found near the end of the README.md
+All icon names from the default fonts can be found via the [DEMO](https://play.google.com/store/apps/details?id=com.mikepenz.iconics.sample) application.
+
+###As ImageView
+```xml
+<com.mikepenz.iconics.view.IconicsImageView
+    android:layout_width="72dp"
+    android:layout_height="72dp"
+    app:iiv_color="@android:color/holo_red_dark"
+    app:iiv_icon="gmd-favorite" />
+```
+
+###As Text
+
+To use the icon within text use the `{` icon-definer `}` syntax
+
 ```gson
 Some great text with a {faw-android} font awesome icon and {met-wind} meteocons icons.
 ```
 
-There are also custom views which allow you to use an Android-Iconics icon out of the box. 
-
-IconicsImageView
-```xml
-<com.mikepenz.iconics.view.IconicsImageView
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        app:iiv_icon="gmd-favorite-border"
-        app:iiv_color="@android:color/holo_red_dark"
-        />
-```
-
-IconicsTextView
+####As IconicsTextView
 ```xml
 <com.mikepenz.iconics.view.IconicsTextView
         android:text="abc{hif-test}defgh{faw-adjust}ijk{fon-test1}lmnopqrstuv{fon-test2}wxyz"
@@ -75,7 +99,7 @@ IconicsTextView
         android:textSize="16sp"/>
 ```
 
-IconicsButton
+####As IconicsButton
 ```xml
 <com.mikepenz.iconics.view.IconicsButton
         android:text="{faw-adjust} Button"
@@ -83,57 +107,49 @@ IconicsButton
         android:layout_height="60dp"/>
 ```
 
-For more samples look at the source code of the sample.
 
-##Use typeface-library-addons
-One basic function of this library is the feature to drop in new typefaces on the go. The default font of this project is FontAwesome (http://fontawesome.io), but you can create and add as many as you like.
+#Screenshots
 
-The main idea is that the community can create libraries which can be used without the need of an extra library. 
+![Image](https://raw.githubusercontent.com/mikepenz/Android-Iconics/develop/DEV/github/screenshots1.jpg)
 
-So how does it work?
-Just add the dependency of any and as many typface-library-addons in your build.gradle just beneath the android-iconics dependency.
 
-```javascript
-dependencies {
-	compile 'com.mikepenz:iconics:1.3.0@aar'
-	compile 'com.mikepenz:octicons-typeface:2.2.0@aar'
-	compile 'com.mikepenz:meteocons-typeface:1.1.1@aar'
-	compile 'com.mikepenz:community-material-typeface:1.1.70@aar'
-}
-```
+#Available fonts
+* [Fontawesome](http://fontawesome.io)
+  * "faw"
+  * DEFAULT
+* [Google Material Design Icons](https://github.com/google/material-design-icons)
+  * "gmd"
+  * DEFAULT
+* [Meteocons](http://www.alessioatzeni.com/meteocons/)
+  * "met"
+  * compile 'com.mikepenz.iconics:meteocons-typeface:+@aar'
+* [Octicons](https://github.com/github/octicons)
+  * "oct"
+  * compile 'com.mikepenz.iconics:octicons-typeface:+@aar'
+* [Community Material](http://materialdesignicons.com/)
+  * "cmd"
+  * compile 'com.mikepenz.iconics:community-material-typeface:+@aar'
 
-To enable them for the IconicsTextView too follow the steps under [Register typeface](#register-typeface)
 
-##Advanced usage
+#Advanced Usage
 
-###working with multiple typeface-library-addons and icons
-In some cases you will use multiple typefaces. It is really easy to decide which icon of which typeface-library-addon should be used. Each of those got a unique **3-character** long identifier which is the prefix of every single icon. 
-FontAwesome - "faw"
-Meteocons - "met"
+###Register fonts
 
-Evertime you want to use an icon in a text just write {faw-adjust}, ...
-
-###Register typeface
-In some cases you will love to use a typeface-library-addon in your IconicTextView and everywhere else without the need of adding it as typeface all the time.
-
-Just override your Application and register your additional fonts like this:
+If you want to add your own custom font, or a GenericFont you have to register this font (before using it). The best place to do this is the `Application`.
 ```java
 public class CustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Iconics.registerFont(new Meteoconcs());
-        Iconics.registerFont(new Octicons());
-        Iconics.registerFont(new CommunityMaterial());
+
+        //only required if you add a custom or generic font on your own
+        Iconics.init(getApplicationContext());
+
+        //register custom fonts like this (or also provide a font definition file)
         Iconics.registerFont(new CustomFont());
     }
 }
-```
-and set it in your AndroidManifest.xml as name
-```java
-    <application
-        android:name="com.mikepenz.iconics.sample.CustomApplication"
-        ...
+
 ```
 
 ###Advanced IconicsBuilder
@@ -156,42 +172,157 @@ Sometimes you won't like to use the icon-key ("faw-adjust") like this, but use t
   new IconicsDrawable(this, FontAwesome.Icon.faw_adjust).sizeDp(24)
 ```
 
-##Available fonts
-* [Fontawesome](http://fontawesome.io)
-  * "faw"
-  * DEFAULT
-* [Google Material Design Icons](https://github.com/google/material-design-icons)
-  * "gmd"
-  * DEFAULT
-* [Meteocons](http://www.alessioatzeni.com/meteocons/)
-  * "met"
-  * compile 'com.mikepenz.iconics:meteocons-typeface:+@aar'
-* [Octicons](https://github.com/github/octicons)
-  * "oct"
-  * compile 'com.mikepenz.iconics:octicons-typeface:+@aar'
-* [Community Material](http://materialdesignicons.com/)
-  * "cmd"
-  * compile 'com.mikepenz.iconics:community-material-typeface:+@aar'
+
+###Create custom fonts using [Fontello](http://fontello.com) or [IcoMoon](http://icomoon.io)
+
+If you plan to use an existing icon font, one provided by your design team, or if you have an svg and want to use it as drawable just follow those simple steps.
+
+####1. Create the icon font (not required if you already have one)
+Open [Fontello](http://fontello.com) or [IcoMoon](http://icomoon.io) and select the icons you need. Add your vectors (.svg) and then just download the font.
+
+####1.2. Add the font to your project
+- Unpack the .zip you just downloaded and add the *.ttf to your project under `src/main/assets/fonts`
+- In the next step you will have to know the unicode value for the icons
+ - this information can be found in the `fontello-codes.css` (if you used fontello)
+ - or in the style.css (if you used icomoon)
+
+####2. Implement your CustomFont
+- Great you got your IconFont and you know which unicode character displays which icon. Now you can create your own font with it. You have to options 2.1. or 2.2.
+
+#####2.1. Implement as GenericFont
+- To implement a GenericFont just provide the mapping before you use the Iconics. (best inside a [CustomApplication](https://github.com/mikepenz/Android-Iconics/blob/develop/app/src/main/java/com/mikepenz/iconics/sample/CustomApplication.java))
+
+```java
+//Create a new GenericFont by defining a 3 char long fontId and by defining the path to the font (starting inside src/main/assets)
+GenericFont gf2 = new GenericFont("gmf", "fonts/materialdrawerfont.ttf");
+//now register the icons which are inside the font. Just provide the unicode value and name.
+//the unicode value is defined as '\e800', just add the 'u' after '\' to tell java that it's an unicode char
+gf2.registerIcon("person", '\ue800');
+gf2.registerIcon("up", '\ue801');
+gf2.registerIcon("down", '\ue802');
+//now register the created GenericFont
+Iconics.registerFont(gf2);
+```
+- After defining the GenericFont you can use it like this
+```java
+new IconicsDrawable(this).icon("gmf-person").sizeDp(24);
+```
+
+#####2.2. Implement as CustomFont
+- A more complex but easier to use / more safe implementation is to create a CustomFont.
+- For a QuickStart just use the [CustomFont](https://github.com/mikepenz/Android-Iconics/blob/develop/app/src/main/java/com/mikepenz/iconics/sample/typeface/CustomFont.java) used in the Sample app
+- A CustomFont has to implement the `ITypeface` interface, and can then be easily used as any of the provided fonts
+
+```java
+public class CustomFont implements ITypeface {
+    //define the font file to use
+    private static final String TTF_FILE = "fontello.ttf";
+
+    private static Typeface typeface = null;
+    private static HashMap<String, Character> mChars;
+
+    //return a icon by it's key
+    @Override
+    public IIcon getIcon(String key) {
+        return Icon.valueOf(key);
+    }
+
+    //return all possible key unicode-character mappings
+    @Override
+    public HashMap<String, Character> getCharacters() {
+        if (mChars == null) {
+            HashMap<String, Character> aChars = new HashMap<String, Character>();
+            for (Icon v : Icon.values()) {
+                aChars.put(v.name(), v.character);
+            }
+            mChars = aChars;
+        }
+
+        return mChars;
+    }
+
+    //the mapping prefix used for this font like fon-android
+    @Override
+    public String getMappingPrefix() {
+        return "fon";
+    }
+
+    //return all possible icon names
+    @Override
+    public Collection<String> getIcons() {
+        Collection<String> icons = new LinkedList<String>();
+
+        for (Icon value : Icon.values()) {
+            icons.add(value.name());
+        }
+
+        return icons;
+    }
+
+    //implement all additional methods from the interface
+    //...
 
 
-##Demo
+    //return the font from the assets (you can take this method in most cases)
+    @Override
+    public Typeface getTypeface(Context context) {
+        if (typeface == null) {
+            try {
+                typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + TTF_FILE);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return typeface;
+    }
+
+    //implement the enum containing all possible icons. each icon name is like `fontId`_`iconNamE` --> `fon_test1` maps to the icon with the unicode char \e800
+    public static enum Icon implements IIcon {
+        //define all possible mappings here:
+        fon_test1('\ue800'),
+        fon_test2('\ue801');
+
+        //define all methods required by the IIcon interface, you can just copy and paste those
+        char character;
+        Icon(char character) {
+            this.character = character;
+        }
+
+        public String getFormattedName() {
+            return "{" + name() + "}";
+        }
+
+        public char getCharacter() {
+            return character;
+        }
+
+        public String getName() {
+            return name();
+        }
+
+        // remember the typeface so we can use it later
+        private static ITypeface typeface;
+
+        public ITypeface getTypeface() {
+            if (typeface == null) {
+                typeface = new CustomFont();
+            }
+            return typeface;
+        }
+    }
+}
+```
+
+#ProGuard
+ProGuard rules are now bundled internally with each font. No additional rules are required on your end.
+
+#Demo
 You can try the sample application out. It's on Google Play ;)
 https://play.google.com/store/apps/details?id=com.mikepenz.iconics.sample
 
-##Contribute
-The easiest way to contribute is by creating a new typeface-library addon. This is a pretty easy step. Just look into the meteocons-typeface-library project within this repository. You will see you only need 2 things. The font itself (the .ttf file). And the Typeface definition which is an implementation of the ITypeface class. 
 
-Just fill in the required information, create the mapping and it works. To help the users using your typeface-library-addon you should upload it to maven and let me know so i can add it to the list of available fonts. 
-
-So the hardest part is to create the mapping. I also have a solution for this problem. 
-Just use the awesome service of http://fontello.com/ create a typeface-library-addon of one of the provided fonts there or upload your own. If missing customize the names. Choose a good 3-character long prefix (css prefix under settings) and download the webfont. 
-This will include the .ttf to use, and a file called test-codes.css under css. This repository includes a small helper to create the enum-list for the Typeface definition class. (You can find it under /DEV/extractor). Just drop the test-codes.css in the same folder. rename it to test.css and run the extractor.js with node extractor.js. This will output the correct list.
-
-If something is unclear, don't be afraid to drop an e-mail, or create an github issue.
-
-
-##Credits
-- [Joan Zapata](https://github.com/JoanZapata) He is the creator of [Android-Iconify](https://github.com/JoanZapata/android-iconify) which gave me the idea of this project. It implements some really great concepts, and i only tried to improve them and give it some more flexibility.
+#Credits
+- [Joan Zapata](https://github.com/JoanZapata) He is the creator of [Android-Iconify](https://github.com/JoanZapata/android-iconify) which gave me the idea of this project. Some core concepts and ideas were reused, but everything is written from scratch.
 
 
 #Developed By

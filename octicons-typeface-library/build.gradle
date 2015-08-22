@@ -23,8 +23,9 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 220
-        versionName "2.2.0"
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+        versionCode 30001
+        versionName "3.0.0.1"
     }
     buildTypes {
         release {
@@ -38,5 +39,5 @@ if (project.hasProperty('pushall') || project.hasProperty('octicons')) {
 }
 
 dependencies {
-    compile project(':library')
+    compile project(':library-core')
 }

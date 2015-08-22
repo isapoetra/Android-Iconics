@@ -24,8 +24,9 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 117
-        versionName "1.1.70"
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+        versionCode 11703
+        versionName "1.1.70.3"
     }
     buildTypes {
         release {
@@ -39,5 +40,5 @@ if (project.hasProperty('pushall') || project.hasProperty('communitymaterialonly
 }
 
 dependencies {
-    compile project(':library')
+    compile project(':library-core')
 }
